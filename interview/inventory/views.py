@@ -7,26 +7,21 @@ from interview.inventory.schemas import InventoryMetaData
 from interview.inventory.serializers import InventoryLanguageSerializer, InventorySerializer, InventoryTagSerializer, InventoryTypeSerializer
 
 from datetime import datetime
+from django.http import JsonResponse
+from django.views import View
 
+class InventoryCreatedAfterView(View):
 
-class InventoryListCreateViewTimeBased(APIView):
-    queryset = Inventory.objects.all()
-    serializer_class = InventorySerializer
-
-    def get(self, request: Request, *args, **kwargs) -> Response:
+    def get(self, request, date_str):
         try:
-            created_after_date_str = request.query_params.get('created_after')
-            if not created_after_date_str:
-                return Response({'error': 'Query parameter "created_after" is required.'}, status=400)
+            created_after_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            inventories = Inventory.objects.filter(created_at__gt=created_after_date)
+            serializer = InventorySerializer(inventories, many=True)
 
-            created_after_date = datetime.strptime(created_after_date_str, '%Y-%m-%d').date()
-            inventories = self.get_queryset().filter(created_at__gt=created_after_date)
-            serializer = self.serializer_class(inventories, many=True)
-
-            return Response(serializer.data, status=200)
+            return JsonResponse(serializer.data, status=200, safe=False)
         except ValueError:
-            return Response({'error': 'Invalid date format. Please provide the date in "YYYY-MM-DD" format.'},
-                            status=400)
+            return JsonResponse({'error': 'Invalid date format. Please provide the date in "YYYY-MM-DD" format.'},
+                                status=400)
 
 
 class InventoryListCreateView(APIView):
