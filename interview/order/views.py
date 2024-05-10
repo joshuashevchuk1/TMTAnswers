@@ -17,6 +17,9 @@ class OrderTagListCreateView(generics.ListCreateAPIView):
 
 
 class OrderListBetweenDatesView(generics.ListAPIView):
+    # Working Example query
+    # http://127.0.0.1:8000/orders/orders-between-dates/?start_date=2024-05-1&embargo_date=2024-06-09http://127.0.0.1:8000/orders/orders-between-dates/?start_date=2024-05-1&embargo_date=2024-06-09
+
     serializer_class = OrderSerializer
 
     def get_queryset(self):
@@ -29,5 +32,5 @@ class OrderListBetweenDatesView(generics.ListAPIView):
         embargo_date = timezone.datetime.strptime(embargo_date, '%Y-%m-%d')
 
         # Filter orders between the start and embargo date
-        queryset = Order.objects.filter(date__range=[start_date, embargo_date])
+        queryset = Order.objects.filter(start_date__range=[start_date, embargo_date])
         return queryset
