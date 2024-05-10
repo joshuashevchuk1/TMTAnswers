@@ -1,7 +1,9 @@
+from interview.order.models import OrderTag
+from interview.order.serializers import OrderTagSerializer
 from rest_framework import generics
-
-from interview.order.models import Order, OrderTag
-from interview.order.serializers import OrderSerializer, OrderTagSerializer
+from django.utils import timezone
+from interview.order.models import Order
+from interview.order.serializers import OrderSerializer
 
 # Create your views here.
 class OrderListCreateView(generics.ListCreateAPIView):
@@ -12,12 +14,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
 class OrderTagListCreateView(generics.ListCreateAPIView):
     queryset = OrderTag.objects.all()
     serializer_class = OrderTagSerializer
-
-
-from rest_framework import generics
-from django.utils import timezone
-from interview.order.models import Order
-from interview.order.serializers import OrderSerializer
 
 
 class OrderListBetweenDatesView(generics.ListAPIView):
