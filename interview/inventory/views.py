@@ -1,27 +1,26 @@
-from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework.views import APIView
 
-from interview.inventory.models import Inventory, InventoryLanguage, InventoryTag, InventoryType
+from interview.inventory.models import InventoryLanguage, InventoryTag, InventoryType
 from interview.inventory.schemas import InventoryMetaData
-from interview.inventory.serializers import InventoryLanguageSerializer, InventorySerializer, InventoryTagSerializer, InventoryTypeSerializer
+from interview.inventory.serializers import InventoryLanguageSerializer, InventoryTagSerializer, InventoryTypeSerializer
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from datetime import datetime
-from django.http import JsonResponse
-from django.views import View
+from .serializers import InventorySerializer
+from interview.inventory.models import Inventory
 
-class InventoryCreatedAfterView(View):
-
+class InventoryCreatedAfterView(APIView):
     def get(self, request, date_str):
         try:
             created_after_date = datetime.strptime(date_str, '%Y-%m-%d').date()
             inventories = Inventory.objects.filter(created_at__gt=created_after_date)
             serializer = InventorySerializer(inventories, many=True)
-
-            return JsonResponse(serializer.data, status=200, safe=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except ValueError:
-            return JsonResponse({'error': 'Invalid date format. Please provide the date in "YYYY-MM-DD" format.'},
-                                status=400)
+            return Response({'error': 'Invalid date format. Please provide the date in "YYYY-MM-DD" format.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class InventoryListCreateView(APIView):
