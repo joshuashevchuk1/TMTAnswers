@@ -3,7 +3,7 @@ import requests
 import json
 
 class Challenge3TestCase(unittest.TestCase):
-    def test_orders_between_dates(self):
+    def test_challenge3(self):
         # Define the URL and query parameters
         url = 'http://localhost:8000/orders/orders-between-dates/'
         start_date = '2024-05-01'
