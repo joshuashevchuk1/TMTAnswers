@@ -14,5 +14,5 @@ class OrderBetweenDatesTestCase(unittest.TestCase):
 
         # Check that the response status code is 200 OK
         self.assertEqual(response.status_code, 200)
-        print(json.dumps(response.json(),indent=4))
+        print(json.dumps(response.json(), indent=4))
 
