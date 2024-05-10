@@ -12,6 +12,8 @@ from .serializers import InventorySerializer
 from interview.inventory.models import Inventory
 
 class InventoryCreatedAfterView(APIView):
+    # Example use
+    # http://127.0.0.1:8000/inventory/created-after/2024-05-01/
     def get(self, request, date_str):
         try:
             created_after_date = datetime.strptime(date_str, '%Y-%m-%d').date()
