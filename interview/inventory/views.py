@@ -12,16 +12,25 @@ class InventoryDeactivateOrderView(APIView):
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
 
-    def patch(self, request: Request, *args, **kwargs) -> Response:
+    def post(self, request: Request, *args, **kwargs) -> Response:
         try:
-            order = self.get_queryset().get(pk=kwargs['pk'])
-        except:
-            return Response({'Expection for DeactivateOrderView'}, status=404)
+            order = self.queryset.get(pk=request.data.get('pk'))
+            order.is_active = False
+            order.save()
+            serializer = self.serializer_class(order)
+            return Response(serializer.data, status=200)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
 
-        order.is_active = False
-        order.save()
-        serializer = self.serializer_class(order)
-        return Response(serializer.data, status=200)
+    def delete(self, request: Request, *args, **kwargs) -> Response:
+        try:
+            order = self.queryset.get(pk=request.data.get('pk'))
+            order.delete()
+            return Response({'success': 'Order deleted successfully.'}, status=204)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+
+
 
 
 class InventoryListCreateView(APIView):

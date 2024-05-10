@@ -11,6 +11,6 @@ urlpatterns = [
     path('languages/', InventoryLanguageListCreateView.as_view(), name='inventory-languages-list'),
     path('tags/', InventoryTagListCreateView.as_view(), name='inventory-tags-list'),
     path('types/', InventoryTypeListCreateView.as_view(), name='inventory-types-list'),
-    path('deactivate/', InventoryDeactivateOrderView.as_view(),name='deactivate-order'),
+    path('deactivate/', InventoryDeactivateOrderView.as_view(),name='deactivate-order'), #http://127.0.0.1:8000/inventory/deactivate/
     path('', InventoryListCreateView.as_view(), name='inventory-list'),
 ]
