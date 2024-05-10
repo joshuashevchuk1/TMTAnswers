@@ -6,6 +6,23 @@ from interview.inventory.models import Inventory, InventoryLanguage, InventoryTa
 from interview.inventory.schemas import InventoryMetaData
 from interview.inventory.serializers import InventoryLanguageSerializer, InventorySerializer, InventoryTagSerializer, InventoryTypeSerializer
 
+from rest_framework import status
+
+class InventoryDeactivateOrderView(APIView):
+    queryset = Inventory.objects.all()
+    serializer_class = InventorySerializer
+
+    def patch(self, request: Request, *args, **kwargs) -> Response:
+        try:
+            order = self.get_queryset().get(pk=kwargs['pk'])
+        except:
+            return Response({'Expection for DeactivateOrderView'}, status=404)
+
+        order.is_active = False
+        order.save()
+        serializer = self.serializer_class(order)
+        return Response(serializer.data, status=200)
+
 
 class InventoryListCreateView(APIView):
     queryset = Inventory.objects.all()
