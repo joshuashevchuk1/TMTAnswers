@@ -9,6 +9,14 @@ from interview.inventory.serializers import InventoryLanguageSerializer, Invento
 from rest_framework import status
 
 class InventoryDeactivateOrderView(APIView):
+    # Example use
+    # http://127.0.0.1:8000/inventory/deactivate/
+    #
+    # {
+    #   "pk":<id>
+    # }
+    #
+
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
 
